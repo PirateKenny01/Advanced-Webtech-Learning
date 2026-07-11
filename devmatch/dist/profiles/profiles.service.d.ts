@@ -1,9 +1,7 @@
-import { CreateProfileDto } from './dto/create-profile.dto';
-import { UpdateProfileDto } from './dto/update-profile.dto';
-import { ProfilesService } from './profiles.service';
-export declare class ProfilesController {
-    private profileService;
-    constructor(profileService: ProfilesService);
+import type { CreateProfileDto } from './dto/create-profile.dto';
+import type { UpdateProfileDto } from './dto/update-profile.dto';
+export declare class ProfilesService {
+    private profiles;
     findAll(): {
         id: `${string}-${string}-${string}-${string}-${string}`;
         name: string;
@@ -19,6 +17,6 @@ export declare class ProfilesController {
         description: string;
         id: `${string}-${string}-${string}-${string}-${string}`;
     };
-    Update(id: string, updateProfileDto: UpdateProfileDto): {};
+    update(id: string, updateProfileDto: UpdateProfileDto): {};
     remove(id: string): void;
 }
