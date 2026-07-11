@@ -1,4 +1,4 @@
-import { Controller,Get,Query,Param,Post, Body,Put,Delete,HttpCode,HttpStatus } from '@nestjs/common';
+import { Controller,Get,Query,Param,Post, Body,Put,Delete,HttpCode,HttpStatus,HttpException, NotFoundException } from '@nestjs/common';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ProfilesService } from './profiles.service';
@@ -21,7 +21,12 @@ export class ProfilesController
     findOne(
     @Param('id') id: string) 
     {
+      try {
         return this.profileService.findOne(id);
+      } catch (error) {
+        throw new NotFoundException(error.message);
+      }
+
     }
 
 @Post()

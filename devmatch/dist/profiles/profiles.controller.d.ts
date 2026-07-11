@@ -13,12 +13,16 @@ export declare class ProfilesController {
         id: `${string}-${string}-${string}-${string}-${string}`;
         name: string;
         description: string;
-    } | undefined;
+    };
     create(createProfileDto: CreateProfileDto): {
         name: string;
         description: string;
         id: `${string}-${string}-${string}-${string}-${string}`;
     };
-    Update(id: string, updateProfileDto: UpdateProfileDto): {};
+    Update(id: string, updateProfileDto: UpdateProfileDto): {
+        id: `${string}-${string}-${string}-${string}-${string}`;
+        name: string;
+        description: string;
+    };
     remove(id: string): void;
 }
