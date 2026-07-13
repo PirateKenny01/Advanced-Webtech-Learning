@@ -1,7 +1,8 @@
-import { Controller,Get,Query,Param,Post, Body,Put,Delete,HttpCode,HttpStatus,HttpException, NotFoundException } from '@nestjs/common';
+import { Controller,Get,Query,Param,Post, Body,Put,Delete,HttpCode,HttpStatus,HttpException, NotFoundException,ParseUUIDPipe,ValidationPipe } from '@nestjs/common';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ProfilesService } from './profiles.service';
+import type {UUID} from 'crypto';
 
 @Controller('profiles')
 export class ProfilesController 
@@ -19,15 +20,12 @@ export class ProfilesController
 
   @Get(':id')
     findOne(
-    @Param('id') id: string) 
+    @Param('id',ParseUUIDPipe) id: UUID) 
     {
-      try {
-        return this.profileService.findOne(id);
-      } catch (error) {
-        throw new NotFoundException(error.message);
-      }
-
+      return this.profileService.findOne(id);
     }
+
+    
 
 @Post()
   create( @Body() createProfileDto: CreateProfileDto) 
@@ -38,7 +36,7 @@ export class ProfilesController
 
   @Put(':id')
   Update(
-  @Param('id') id :string,
+  @Param('id',ParseUUIDPipe) id :UUID,
   @Body() updateProfileDto: UpdateProfileDto) 
   {
     return this.profileService.update(id, updateProfileDto);
@@ -48,7 +46,7 @@ export class ProfilesController
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT) // Set the HTTP status code to 200 OK ,but for delete operation, 204 No Content is more appropriate
   remove(
-    @Param('id') id: string) 
+    @Param('id',ParseUUIDPipe) id: UUID) 
     {
        this.profileService.remove(id);
     }
