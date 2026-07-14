@@ -1,54 +1,42 @@
 import { Controller,Get,Query,Param,Post, Body,Put,Delete,HttpCode,HttpStatus,HttpException, NotFoundException,ParseUUIDPipe,ValidationPipe } from '@nestjs/common';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
-import { ProfilesService } from './profiles.service';
+import { ProfileService } from './profiles.service';
 import type {UUID} from 'crypto';
 
 @Controller('profiles')
 export class ProfilesController 
 {
 
-   constructor(private profileService: ProfilesService) {}
+   constructor(private profileService: ProfileService) {}
 
-
-   @Get()
-   findAll(){
-    return this.profileService.findAll();
-   }
- 
-  
-
-  @Get(':id')
-    findOne(
-    @Param('id',ParseUUIDPipe) id: UUID) 
-    {
-      return this.profileService.findOne(id);
-    }
-
-    
-
+  // GET /users/search?name=substring
+  @Get('search')
+  searchByFullName(@Query('name') name: string) 
+  {
+    if (!name) return [];
+    return this.profileService.searchByFullName(name);
+  }
+// create a new user
 @Post()
   create( @Body() createProfileDto: CreateProfileDto) 
     {
     return this.profileService.create(createProfileDto);
     }
   
-
-  @Put(':id')
-  Update(
-  @Param('id',ParseUUIDPipe) id :UUID,
-  @Body() updateProfileDto: UpdateProfileDto) 
+// GET /users/:username
+  @Get(':username')
+  findByUsername(@Param('username') username: string) 
   {
-    return this.profileService.update(id, updateProfileDto);
-
+    return this.profileService.findByUsername(username);
   }
 
-  @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT) // Set the HTTP status code to 200 OK ,but for delete operation, 204 No Content is more appropriate
-  remove(
-    @Param('id',ParseUUIDPipe) id: UUID) 
-    {
-       this.profileService.remove(id);
-    }
+  // DELETE /users/:username
+  @Delete(':username')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  removeByUsername(@Param('username') username: string)
+ {
+    return this.profileService.removeByUsername(username);
+  }
 
 }

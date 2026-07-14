@@ -5,65 +5,52 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProfilesService = void 0;
+exports.ProfileService = void 0;
 const common_1 = require("@nestjs/common");
-const crypto_1 = require("crypto");
-let ProfilesService = class ProfilesService {
-    profiles = [
-        {
-            id: (0, crypto_1.randomUUID)(),
-            name: 'John Doe',
-            description: 'Software Engineer'
-        },
-        {
-            id: (0, crypto_1.randomUUID)(),
-            name: 'Jane Smith',
-            description: 'Product Manager'
-        },
-        {
-            id: (0, crypto_1.randomUUID)(),
-            name: 'Alice Johnson',
-            description: 'UX Designer'
-        },
-    ];
-    findAll() {
-        return this.profiles;
+const typeorm_1 = require("@nestjs/typeorm");
+const typeorm_2 = require("typeorm");
+const profiles_entity_1 = require("./profiles.entity");
+let ProfileService = class ProfileService {
+    profileRepository;
+    constructor(profileRepository) {
+        this.profileRepository = profileRepository;
     }
-    findOne(id) {
-        const matchingProfile = this.profiles.find(profile => profile.id === id);
-        if (!matchingProfile) {
-            throw new Error(`Profile with ID ${id} not found`);
+    async create(createProfileDto) {
+        const profile = this.profileRepository.create(createProfileDto);
+        return this.profileRepository.save(profile);
+    }
+    async searchByFullName(substring) {
+        return this.profileRepository.find({
+            where: {
+                fullName: (0, typeorm_2.ILike)(`%${substring}%`),
+            },
+        });
+    }
+    async findByUsername(username) {
+        const user = await this.profileRepository.findOne({ where: { username } });
+        if (!user) {
+            throw new common_1.NotFoundException(`User with username '${username}' not found`);
         }
-        return matchingProfile;
+        return user;
     }
-    create(createProfileDto) {
-        const createdProfile = {
-            id: (0, crypto_1.randomUUID)(),
-            ...createProfileDto
-        };
-        this.profiles.push(createdProfile);
-        return createdProfile;
-    }
-    update(id, updateProfileDto) {
-        const matchingProfile = this.profiles.find((existingProfile) => existingProfile.id === id);
-        if (!matchingProfile) {
-            throw new common_1.NotFoundException(`Profile with ID ${id} not found`);
+    async removeByUsername(username) {
+        const result = await this.profileRepository.delete({ username });
+        if (result.affected === 0) {
+            throw new common_1.NotFoundException(`User with username '${username}' not found`);
         }
-        matchingProfile.name = updateProfileDto.name;
-        matchingProfile.description = updateProfileDto.description;
-        return matchingProfile;
-    }
-    remove(id) {
-        const profileIndex = this.profiles.findIndex((existingProfile) => existingProfile.id === id);
-        if (profileIndex === -1) {
-            throw new common_1.NotFoundException(`Profile with ID ${id} not found`);
-        }
-        this.profiles.splice(profileIndex, 1);
     }
 };
-exports.ProfilesService = ProfilesService;
-exports.ProfilesService = ProfilesService = __decorate([
-    (0, common_1.Injectable)()
-], ProfilesService);
+exports.ProfileService = ProfileService;
+exports.ProfileService = ProfileService = __decorate([
+    (0, common_1.Injectable)(),
+    __param(0, (0, typeorm_1.InjectRepository)(profiles_entity_1.ProfileEntity)),
+    __metadata("design:paramtypes", [typeorm_2.Repository])
+], ProfileService);
 //# sourceMappingURL=profiles.service.js.map

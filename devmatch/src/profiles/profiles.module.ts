@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ProfilesController } from './profiles.controller';
-import { ProfilesService } from './profiles.service';
-
+import { ProfileService } from './profiles.service';
+import {ProfileEntity} from './profiles.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
+  imports: [TypeOrmModule.forFeature([ProfileEntity])],
   controllers: [ProfilesController],
-  providers: [ProfilesService]
+  providers: [ProfileService]
 })
 export class ProfilesModule {}

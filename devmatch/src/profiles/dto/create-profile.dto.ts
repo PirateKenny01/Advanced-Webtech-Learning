@@ -1,10 +1,17 @@
-import {IsString,Length} from 'class-validator'
+import { IsString, IsNotEmpty, MaxLength, IsOptional, IsBoolean } from 'class-validator';
 
 export class CreateProfileDto {
-   @IsString()
-   @Length(3,100)
-   name!: string;
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(100)
+  username: string;
 
-   @IsString()
-   description!: string;
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(150)
+  fullName: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
 }

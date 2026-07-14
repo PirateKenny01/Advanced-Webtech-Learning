@@ -15,68 +15,59 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProfilesController = void 0;
 const common_1 = require("@nestjs/common");
 const create_profile_dto_1 = require("./dto/create-profile.dto");
-const update_profile_dto_1 = require("./dto/update-profile.dto");
 const profiles_service_1 = require("./profiles.service");
 let ProfilesController = class ProfilesController {
     profileService;
     constructor(profileService) {
         this.profileService = profileService;
     }
-    findAll() {
-        return this.profileService.findAll();
-    }
-    findOne(id) {
-        return this.profileService.findOne(id);
+    searchByFullName(name) {
+        if (!name)
+            return [];
+        return this.profileService.searchByFullName(name);
     }
     create(createProfileDto) {
         return this.profileService.create(createProfileDto);
     }
-    Update(id, updateProfileDto) {
-        return this.profileService.update(id, updateProfileDto);
+    findByUsername(username) {
+        return this.profileService.findByUsername(username);
     }
-    remove(id) {
-        this.profileService.remove(id);
+    removeByUsername(username) {
+        return this.profileService.removeByUsername(username);
     }
 };
 exports.ProfilesController = ProfilesController;
 __decorate([
-    (0, common_1.Get)(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], ProfilesController.prototype, "findAll", null);
-__decorate([
-    (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
+    (0, common_1.Get)('search'),
+    __param(0, (0, common_1.Query)('name')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
-], ProfilesController.prototype, "findOne", null);
+], ProfilesController.prototype, "searchByFullName", null);
 __decorate([
     (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)(new common_1.ValidationPipe())),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_profile_dto_1.CreateProfileDto]),
     __metadata("design:returntype", void 0)
 ], ProfilesController.prototype, "create", null);
 __decorate([
-    (0, common_1.Put)(':id'),
-    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
-    __param(1, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_profile_dto_1.UpdateProfileDto]),
-    __metadata("design:returntype", void 0)
-], ProfilesController.prototype, "Update", null);
-__decorate([
-    (0, common_1.Delete)(':id'),
-    (0, common_1.HttpCode)(common_1.HttpStatus.NO_CONTENT),
-    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
+    (0, common_1.Get)(':username'),
+    __param(0, (0, common_1.Param)('username')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
-], ProfilesController.prototype, "remove", null);
+], ProfilesController.prototype, "findByUsername", null);
+__decorate([
+    (0, common_1.Delete)(':username'),
+    (0, common_1.HttpCode)(common_1.HttpStatus.NO_CONTENT),
+    __param(0, (0, common_1.Param)('username')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], ProfilesController.prototype, "removeByUsername", null);
 exports.ProfilesController = ProfilesController = __decorate([
     (0, common_1.Controller)('profiles'),
-    __metadata("design:paramtypes", [profiles_service_1.ProfilesService])
+    __metadata("design:paramtypes", [profiles_service_1.ProfileService])
 ], ProfilesController);
 //# sourceMappingURL=profiles.controller.js.map

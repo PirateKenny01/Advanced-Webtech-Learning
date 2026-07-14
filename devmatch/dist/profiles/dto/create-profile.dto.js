@@ -12,17 +12,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateProfileDto = void 0;
 const class_validator_1 = require("class-validator");
 class CreateProfileDto {
-    name;
-    description;
+    username;
+    fullName;
+    isActive;
 }
 exports.CreateProfileDto = CreateProfileDto;
 __decorate([
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.Length)(3, 100),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.MaxLength)(100),
     __metadata("design:type", String)
-], CreateProfileDto.prototype, "name", void 0);
+], CreateProfileDto.prototype, "username", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.MaxLength)(150),
     __metadata("design:type", String)
-], CreateProfileDto.prototype, "description", void 0);
+], CreateProfileDto.prototype, "fullName", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], CreateProfileDto.prototype, "isActive", void 0);
 //# sourceMappingURL=create-profile.dto.js.map

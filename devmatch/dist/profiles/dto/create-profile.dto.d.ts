@@ -1,4 +1,5 @@
 export declare class CreateProfileDto {
-    name: string;
-    description: string;
+    username: string;
+    fullName: string;
+    isActive?: boolean;
 }
